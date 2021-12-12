@@ -1,11 +1,11 @@
 package weatherapp;
 
-
 import model_json.Root;
 import org.junit.Assert;
 import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
 
+import java.text.DecimalFormat;
 import java.util.Arrays;
 
 
@@ -19,13 +19,14 @@ public class TestCode1 {
 
     public static void main(String[] args) {
 
-        double celsium = getDataWeather(URL_CELCIUM, MediaType.APPLICATION_JSON) + 273.15;
+        double celsiumChangeToKelvin = getDataWeather(URL_CELCIUM, MediaType.APPLICATION_JSON) + 273.15;
         double kelvin = getDataWeather(URL_KELVIN, MediaType.APPLICATION_JSON);
 
-        String celsiumFormat = String.format("%.2f", celsium);
-        String kelvinFormat = String.format("%.2f", kelvin);
+        DecimalFormat decimalFormat = new DecimalFormat("#.##");
+        String formatCelsium = decimalFormat.format(celsiumChangeToKelvin);
+        String formatKelvin = decimalFormat.format(kelvin);
 
-        Assert.assertEquals(celsiumFormat, kelvinFormat);
+        Assert.assertEquals(formatCelsium, formatKelvin);
 
     }
 
