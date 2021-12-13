@@ -1,13 +1,12 @@
 package weatherapp;
 
-import model_json.Root;
+import model_json.Forecast;
 import org.junit.Assert;
 import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.text.DecimalFormat;
 import java.util.Arrays;
-
 
 public class TestCode1 {
 
@@ -34,10 +33,10 @@ public class TestCode1 {
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Arrays.asList(new MediaType[]{content}));
         headers.setContentType(content);
-        HttpEntity<Root> entity = new HttpEntity<Root>(headers);
+        HttpEntity<Forecast> entity = new HttpEntity<Forecast>(headers);
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<Root> response = restTemplate.exchange(url, HttpMethod.GET, entity, Root.class);
-        Root list = response.getBody();
+        ResponseEntity<Forecast> response = restTemplate.exchange(url, HttpMethod.GET, entity, Forecast.class);
+        Forecast list = response.getBody();
         HttpStatus statusCode = response.getStatusCode();
         Assert.assertEquals(HttpStatus.OK, statusCode);
         if (statusCode == HttpStatus.OK) {

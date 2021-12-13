@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
-public class Root {
+public class Forecast {
     @JsonProperty("coord")
     public Coord getCoord() {
         return this.coord;

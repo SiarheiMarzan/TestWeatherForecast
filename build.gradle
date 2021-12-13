@@ -28,8 +28,10 @@ dependencies {
     implementation 'org.springframework:spring-context:5.3.13'
     implementation 'org.springframework:spring-web:5.3.13'
 
+    implementation 'org.jsoup:jsoup:1.14.3'
+
+
     implementation 'org.springframework.boot:spring-boot-starter-data-rest:2.6.1'
-//    implementation 'com.fasterxml.jackson.core:jackson-core:2.13.0'
     implementation 'org.springframework.integration:spring-integration-http:5.5.6'
 
     implementation 'com.fasterxml.jackson.core:jackson-core:2.13.0'
