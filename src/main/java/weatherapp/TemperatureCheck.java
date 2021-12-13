@@ -8,18 +8,21 @@ import org.springframework.web.client.RestTemplate;
 import java.text.DecimalFormat;
 import java.util.Arrays;
 
-public class TestCode1 {
+public class TemperatureCheck {
 
     static final String URL_CELCIUM = "https://api.openweathermap.org/data/2.5/weather?q=Brest" +
             ",BLR&units=metric&appid=443625ff5854abe232f09b68419c89a3";
 
-    static final String URL_KELVIN = "https://api.openweathermap.org/data/2.5/weather?q=Brest" +
+    static final String URL_KELVIN_JSON = "https://api.openweathermap.org/data/2.5/weather?q=Brest" +
             ",BLR&appid=443625ff5854abe232f09b68419c89a3";
+
+    static final String URL_KELVIN_XML = "https://api.openweathermap.org/data/2.5/weather?q=Brest" +
+            ",BLR&mode=xml&appid=443625ff5854abe232f09b68419c89a3";
 
     public static void main(String[] args) {
 
         double celsiumChangeToKelvin = getDataWeather(URL_CELCIUM, MediaType.APPLICATION_JSON) + 273.15;
-        double kelvin = getDataWeather(URL_KELVIN, MediaType.APPLICATION_JSON);
+        double kelvin = getDataWeather(URL_KELVIN_JSON, MediaType.APPLICATION_JSON);
 
         DecimalFormat decimalFormat = new DecimalFormat("#.##");
         String formatCelsium = decimalFormat.format(celsiumChangeToKelvin);
@@ -38,7 +41,6 @@ public class TestCode1 {
         ResponseEntity<Forecast> response = restTemplate.exchange(url, HttpMethod.GET, entity, Forecast.class);
         Forecast list = response.getBody();
         HttpStatus statusCode = response.getStatusCode();
-        Assert.assertEquals(HttpStatus.OK, statusCode);
         if (statusCode == HttpStatus.OK) {
             if (list != null) {
                 return list.getMain().getTemp();

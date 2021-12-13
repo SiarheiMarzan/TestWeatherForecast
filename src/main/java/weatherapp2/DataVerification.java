@@ -7,15 +7,13 @@ import org.junit.Assert;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 import org.w3c.dom.Document;
-import org.xml.sax.SAXException;
 
-import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
-public class TestCode3 {
+public class DataVerification {
 
     private Document document;
 
@@ -24,32 +22,31 @@ public class TestCode3 {
     static final String URL_KELVIN_XML = "https://api.openweathermap.org/data/2.5/weather?q=Brest" +
             ",BLR&mode=xml&appid=443625ff5854abe232f09b68419c89a3";
 
-    public static void main(String[] args) throws ParserConfigurationException, IOException, SAXException {
+    public static void main(String[] args){
 
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<Forecast> response = restTemplate.getForEntity(URL_KELVIN, Forecast.class);
+        Assert.assertEquals(response.getStatusCode().value(), 200);
         Forecast infoWeather = response.getBody();
-        var coordinateLatCityJson = infoWeather.getCoord().getLat();
-        String coordinateLatCityJsonConv = String.valueOf(coordinateLatCityJson);
-        var coordinateLonCityJson = infoWeather.getCoord().getLon();
-        String coordinateLonCityJsonConv = String.valueOf(coordinateLonCityJson);
-        var riseSunJson = infoWeather.getSys().getSunrise();
-        LocalDateTime dtRise = Instant.ofEpochSecond(riseSunJson).atZone(ZoneId.of("UTC")).toLocalDateTime();
-        String riseSunJsonConv = String.valueOf(dtRise);
-        var setSunJson = infoWeather.getSys().getSunset();
-        LocalDateTime dtSet = Instant.ofEpochSecond(setSunJson).atZone(ZoneId.of("UTC")).toLocalDateTime();
-        String setSunJsonConv = String.valueOf(dtSet);
-        var speedWindJson = infoWeather.getWind().getSpeed();
-        var pressureAirJson = infoWeather.getMain().getPressure();
-        String pressureAirJsonConv = String.valueOf(pressureAirJson);
-        var tempAirMaxJson = infoWeather.getMain().getTemp_max();
-        String tempAirMaxConv = String.valueOf(tempAirMaxJson);
-        var tempAirMinJson = infoWeather.getMain().getTemp_min();
-        String tempAirMinConv = String.valueOf(tempAirMinJson);
-        var feelsLikeJson = infoWeather.getMain().getFeels_like();
-        String feelsLikeConv = String.valueOf(feelsLikeJson);
 
-        org.jsoup.nodes.Document dataFromOpenweathermap = Jsoup.connect(URL_KELVIN_XML).get();
+        String coordinateLatCityJsonConv = String.valueOf(infoWeather.getCoord().getLat());
+        String coordinateLonCityJsonConv = String.valueOf(infoWeather.getCoord().getLon());
+        LocalDateTime dtRise = Instant.ofEpochSecond(infoWeather.getSys().getSunrise()).atZone(ZoneId.of("UTC")).toLocalDateTime();
+        String riseSunJsonConv = String.valueOf(dtRise);
+        LocalDateTime dtSet = Instant.ofEpochSecond(infoWeather.getSys().getSunset()).atZone(ZoneId.of("UTC")).toLocalDateTime();
+        String setSunJsonConv = String.valueOf(dtSet);
+        double speedWindJson = infoWeather.getWind().getSpeed();
+        String pressureAirJsonConv = String.valueOf(infoWeather.getMain().getPressure());
+        String tempAirMaxConv = String.valueOf(infoWeather.getMain().getTemp_max());
+        String tempAirMinConv = String.valueOf(infoWeather.getMain().getTemp_min());
+        String feelsLikeConv = String.valueOf(infoWeather.getMain().getFeels_like());
+
+        org.jsoup.nodes.Document dataFromOpenweathermap = null;
+        try {
+            dataFromOpenweathermap = Jsoup.connect(URL_KELVIN_XML).get();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         Elements coordinates = dataFromOpenweathermap.select("coord");
         Elements sunTimeLive = dataFromOpenweathermap.select("sun");
         Elements speedWind = dataFromOpenweathermap.select("speed");
@@ -78,4 +75,5 @@ public class TestCode3 {
         Assert.assertEquals(feelsLikeConv, feelsLikeXML);
 
     }
+
 }
