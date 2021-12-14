@@ -1,4 +1,4 @@
-package weatherapp;
+package weather_part_one;
 
 import model_json.Forecast;
 import org.junit.Assert;

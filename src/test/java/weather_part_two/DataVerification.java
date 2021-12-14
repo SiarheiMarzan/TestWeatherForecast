@@ -1,4 +1,4 @@
-package weatherapp2;
+package weather_part_two;
 
 import model_json.Forecast;
 import org.jsoup.Jsoup;
