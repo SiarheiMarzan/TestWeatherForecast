@@ -38,13 +38,13 @@ public class TemperatureCheck {
         HttpEntity<Forecast> entity = new HttpEntity<>(headers);
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<Forecast> response = restTemplate.exchange(url, HttpMethod.GET, entity, Forecast.class);
-        Forecast list = response.getBody();
+        Forecast getJsonList = response.getBody();
         HttpStatus statusCode = response.getStatusCode();
         if (statusCode == HttpStatus.OK) {
-            if (list != null) {
-                return list.getMain().getTemp();
+            if (getJsonList != null) {
+                return getJsonList.getMain().getTemp();
             }
         }
-        return list.getMain().getTemp();
+        return getJsonList.getMain().getTemp();
     }
 }
