@@ -2,23 +2,24 @@ package weather_obl_city;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tngtech.java.junit.dataprovider.DataProvider;
-import com.tngtech.java.junit.dataprovider.DataProviderRunner;
-import com.tngtech.java.junit.dataprovider.UseDataProvider;
 import org.assertj.core.api.SoftAssertions;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.io.IOException;
 import java.net.URL;
 
-@RunWith(DataProviderRunner.class)
 public class WeatherInfoCity {
 
     private SoftAssertions softAssertions = new SoftAssertions();
 
-    @Test
-    @UseDataProvider("sumTestData")
+    @ParameterizedTest
+    @ValueSource(strings = {"Minsk,BLR",
+            "Brest,BLR",
+            "Vitebsk,BLR",
+            "Mogilev,BLR",
+            "Gomel,BLR",
+            "Grodno,BLR"})
     public void temperatureCitiesTest(String city) {
         String urlJson = "https://api.openweathermap.org/data/2.5/forecast?q=" + city
                 + "&units=metric&appid=443625ff5854abe232f09b68419c89a3";
@@ -44,15 +45,4 @@ public class WeatherInfoCity {
         softAssertions.assertAll();
     }
 
-    @DataProvider
-    public static Object[] dataNameCityForTest() {
-        return new Object[]{
-                "Minsk,BLR",
-                "Brest,BLR",
-                "Vitebsk,BLR",
-                "Mogilev,BLR",
-                "Gomel,BLR",
-                "Grodno,BLR"
-        };
-    }
 }
