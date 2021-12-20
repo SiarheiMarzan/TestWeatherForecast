@@ -31,10 +31,10 @@ public class WeatherInfoCity {
             e.printStackTrace();
         }
 
-        int sizeValueList = getJsonForTest.get("list").size();
+        int getSizeList = getJsonForTest.get("list").size();
         double controlTemperature = 35.0;
 
-        for (int i = 0; i <= sizeValueList - 1; i++) {
+        for (int i = 0; i <= getSizeList - 1; i++) {
             String dataFromDtTxt = getJsonForTest.get("list").get(i).path("dt_txt").toString();
 
             if (dataFromDtTxt.contains("15:00:00")) {
