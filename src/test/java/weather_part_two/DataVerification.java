@@ -23,21 +23,26 @@ public class DataVerification {
     public void weatherDataTest() {
 
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<Forecast> response = restTemplate.getForEntity(URL_KELVIN_JSON, Forecast.class);
-        Assert.assertEquals(response.getStatusCode().value(), 200);
-        Forecast infoWeather = response.getBody();
+        ResponseEntity<Forecast> responseWeatherWebsite = restTemplate.getForEntity(URL_KELVIN_JSON, Forecast.class);
+        Assert.assertEquals(responseWeatherWebsite.getStatusCode().value(), 200);
+        Forecast getInfoWeather = responseWeatherWebsite.getBody();
 
-        String coordinateLatCityJsonConv = String.valueOf(infoWeather.getCoord().getLat());
-        String coordinateLonCityJsonConv = String.valueOf(infoWeather.getCoord().getLon());
-        LocalDateTime dtRise = Instant.ofEpochSecond(infoWeather.getSys().getSunrise()).atZone(ZoneId.of("UTC")).toLocalDateTime();
+        String coordinateLatCityJsonConv = String.valueOf(getInfoWeather.getCoord().getLat());
+        String coordinateLonCityJsonConv = String.valueOf(getInfoWeather.getCoord().getLon());
+
+        LocalDateTime dtRise = Instant.ofEpochSecond(getInfoWeather.getSys().getSunrise()).atZone(ZoneId.of("UTC"))
+                .toLocalDateTime();
         String riseSunJsonConv = String.valueOf(dtRise);
-        LocalDateTime dtSet = Instant.ofEpochSecond(infoWeather.getSys().getSunset()).atZone(ZoneId.of("UTC")).toLocalDateTime();
+
+        LocalDateTime dtSet = Instant.ofEpochSecond(getInfoWeather.getSys().getSunset()).atZone(ZoneId.of("UTC"))
+                .toLocalDateTime();
         String setSunJsonConv = String.valueOf(dtSet);
-        var speedWindJson = infoWeather.getWind().getSpeed();
-        String pressureAirJsonConv = String.valueOf(infoWeather.getMain().getPressure());
-        String tempAirMaxConv = String.valueOf(infoWeather.getMain().getTemp_max());
-        String tempAirMinConv = String.valueOf(infoWeather.getMain().getTemp_min());
-        String feelsLikeConv = String.valueOf(infoWeather.getMain().getFeels_like());
+
+        var speedWindJson = getInfoWeather.getWind().getSpeed();
+        String pressureAirJsonConv = String.valueOf(getInfoWeather.getMain().getPressure());
+        String tempAirMaxConv = String.valueOf(getInfoWeather.getMain().getTemp_max());
+        String tempAirMinConv = String.valueOf(getInfoWeather.getMain().getTemp_min());
+        String feelsLikeConv = String.valueOf(getInfoWeather.getMain().getFeels_like());
 
         org.jsoup.nodes.Document dataFromOpenweathermap = null;
         try {
