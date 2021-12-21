@@ -1,4 +1,4 @@
-package weather_obl_city;
+package test;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -9,7 +9,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import java.io.IOException;
 import java.net.URL;
 
-public class WeatherInfoCity {
+public class ParameterizedTestTemperatureCheck {
 
     private SoftAssertions softAssertions = new SoftAssertions();
 

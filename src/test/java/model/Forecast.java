@@ -1,4 +1,4 @@
-package model_json;
+package model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -16,7 +16,7 @@ public class Forecast {
 
     Coord coord;
 
-    @JsonProperty("weather")
+    @JsonProperty("test")
     public List<Weather> getWeather() {
         return this.weather;
     }

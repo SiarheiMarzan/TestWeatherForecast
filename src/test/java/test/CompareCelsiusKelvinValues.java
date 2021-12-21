@@ -1,15 +1,15 @@
-package weather_part_one;
+package test;
 
-import model_json.Forecast;
+import model.Forecast;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.text.DecimalFormat;
 import java.util.Arrays;
 
-public class TemperatureCheck {
+public class CompareCelsiusKelvinValues {
 
     static final String URL_CELCIUM_JSON = "https://api.openweathermap.org/data/2.5/weather?q=Brest" +
             ",BLR&units=metric&appid=443625ff5854abe232f09b68419c89a3";

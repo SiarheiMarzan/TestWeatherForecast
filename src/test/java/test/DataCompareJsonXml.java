@@ -1,10 +1,10 @@
-package weather_part_two;
+package test;
 
-import model_json.Forecast;
+import model.Forecast;
 import org.jsoup.Jsoup;
 import org.jsoup.select.Elements;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
@@ -13,7 +13,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
-public class DataVerification {
+public class DataCompareJsonXml {
 
     static final String URL_KELVIN_JSON = "https://api.openweathermap.org/data/2.5/weather?q=Brest,BLR&appid=443625ff5854abe232f09b68419c89a3";
     static final String URL_KELVIN_XML = "https://api.openweathermap.org/data/2.5/weather?q=Brest" +
@@ -29,15 +29,12 @@ public class DataVerification {
 
         String coordinateLatCityJsonConv = String.valueOf(getInfoWeather.getCoord().getLat());
         String coordinateLonCityJsonConv = String.valueOf(getInfoWeather.getCoord().getLon());
-
         LocalDateTime dtRise = Instant.ofEpochSecond(getInfoWeather.getSys().getSunrise()).atZone(ZoneId.of("UTC"))
                 .toLocalDateTime();
         String riseSunJsonConv = String.valueOf(dtRise);
-
         LocalDateTime dtSet = Instant.ofEpochSecond(getInfoWeather.getSys().getSunset()).atZone(ZoneId.of("UTC"))
                 .toLocalDateTime();
         String setSunJsonConv = String.valueOf(dtSet);
-
         var speedWindJson = getInfoWeather.getWind().getSpeed();
         String pressureAirJsonConv = String.valueOf(getInfoWeather.getMain().getPressure());
         String tempAirMaxConv = String.valueOf(getInfoWeather.getMain().getTemp_max());
