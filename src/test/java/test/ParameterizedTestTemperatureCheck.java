@@ -46,5 +46,4 @@ public class ParameterizedTestTemperatureCheck {
         }
         softAssertions.assertAll();
     }
-
 }
