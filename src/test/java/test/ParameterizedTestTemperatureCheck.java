@@ -9,6 +9,8 @@ import org.junit.jupiter.params.provider.ValueSource;
 import java.io.IOException;
 import java.net.URL;
 
+import static util.DataReader.getTestData;
+
 public class ParameterizedTestTemperatureCheck {
 
     private SoftAssertions softAssertions = new SoftAssertions();
@@ -21,8 +23,8 @@ public class ParameterizedTestTemperatureCheck {
             "Gomel,BLR",
             "Grodno,BLR"})
     public void temperatureCitiesTest(String city) {
-        String urlJson = "https://api.openweathermap.org/data/2.5/forecast?q=" + city
-                + "&units=metric&appid=443625ff5854abe232f09b68419c89a3";
+        String urlJson = getTestData("weather.base.url") + "/data/2.5/forecast?q=" + city
+                + "&units=metric&appid=" + getTestData("weather.api.key");
 
         JsonNode getJsonForTest = null;
         try {

@@ -1,5 +1,6 @@
 package test;
 
+import client.WeatherClient;
 import model.Forecast;
 import org.jsoup.Jsoup;
 import org.jsoup.select.Elements;
@@ -13,20 +14,24 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
-public class DataCompareJsonXml {
+import static util.DataReader.getTestData;
 
-    static final String URL_KELVIN_JSON = "https://api.openweathermap.org/data/2.5/weather?q=Brest,BLR&appid=443625ff5854abe232f09b68419c89a3";
-    static final String URL_KELVIN_XML = "https://api.openweathermap.org/data/2.5/weather?q=Brest" +
-            ",BLR&mode=xml&appid=443625ff5854abe232f09b68419c89a3";
+public class DataCompareJsonXml {
 
     @Test
     public void weatherDataTest() {
 
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<Forecast> responseWeatherWebsite = restTemplate.getForEntity(URL_KELVIN_JSON, Forecast.class);
-        Assert.assertEquals(responseWeatherWebsite.getStatusCode().value(), 200);
-        Forecast getInfoWeather = responseWeatherWebsite.getBody();
 
+        WeatherClient weatherClient = new WeatherClient(restTemplate);
+
+        ResponseEntity<Forecast> responseWeatherWebsite = weatherClient
+                .requestApi(getTestData("weather.base.url") +
+                        "/data/2.5/weather?q=Brest,BLR&appid=" + getTestData("weather.api.key"));
+
+        Assert.assertEquals(responseWeatherWebsite.getStatusCode().value(), 200);
+
+        Forecast getInfoWeather = responseWeatherWebsite.getBody();
         String coordinateLatCityJsonConv = String.valueOf(getInfoWeather.getCoord().getLat());
         String coordinateLonCityJsonConv = String.valueOf(getInfoWeather.getCoord().getLon());
         LocalDateTime dtRise = Instant.ofEpochSecond(getInfoWeather.getSys().getSunrise()).atZone(ZoneId.of("UTC"))
@@ -35,7 +40,7 @@ public class DataCompareJsonXml {
         LocalDateTime dtSet = Instant.ofEpochSecond(getInfoWeather.getSys().getSunset()).atZone(ZoneId.of("UTC"))
                 .toLocalDateTime();
         String setSunJsonConv = String.valueOf(dtSet);
-        var speedWindJson = getInfoWeather.getWind().getSpeed();
+        double speedWindJson = getInfoWeather.getWind().getSpeed();
         String pressureAirJsonConv = String.valueOf(getInfoWeather.getMain().getPressure());
         String tempAirMaxConv = String.valueOf(getInfoWeather.getMain().getTemp_max());
         String tempAirMinConv = String.valueOf(getInfoWeather.getMain().getTemp_min());
@@ -43,7 +48,9 @@ public class DataCompareJsonXml {
 
         org.jsoup.nodes.Document dataFromOpenweathermap = null;
         try {
-            dataFromOpenweathermap = Jsoup.connect(URL_KELVIN_XML).get();
+            dataFromOpenweathermap = Jsoup.connect(getTestData("weather.base.url")
+                    + "/data/2.5/weather?q=Brest" +
+                    ",BLR&mode=xml&appid=" + getTestData("weather.api.key")).get();
         } catch (IOException e) {
             e.printStackTrace();
         }
