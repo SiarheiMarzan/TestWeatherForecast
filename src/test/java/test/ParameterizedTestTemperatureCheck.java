@@ -5,10 +5,11 @@ import com.fasterxml.jackson.databind.JsonNode;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import util.BaseClass;
 
 import static util.DataReader.getTestData;
 
-public class ParameterizedTestTemperatureCheck {
+public class ParameterizedTestTemperatureCheck extends BaseClass {
 
     private SoftAssertions softAssertions = new SoftAssertions();
 
@@ -23,7 +24,7 @@ public class ParameterizedTestTemperatureCheck {
         String urlJson = getTestData("weather.base.url") + "/data/2.5/forecast?q=" + city
                 + "&units=metric&appid=" + getTestData("weather.api.key");
 
-        JsonNode getJsonForTest = WeatherClient.getDataTreeJson(urlJson);
+        JsonNode getJsonForTest = weatherClient.getDataTreeJson(urlJson);
 
         //get the size of the checked blocks in the list
         int getSizeList = getJsonForTest.get("list").size();

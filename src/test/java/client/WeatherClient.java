@@ -28,7 +28,7 @@ public class WeatherClient {
                 + "/data/2.5/weather?q=" + city + "&appid=" + getTestData("weather.api.key"), Forecast.class);
     }
 
-    public static double getDataWeather(String city) {
+    public double getDataWeather(String city) {
         String urlWeather = getTestData("weather.base.url") + "/data/2.5/weather?q=" + city
                 + "&appid=" + getTestData("weather.api.key");
         HttpHeaders headers = new HttpHeaders();
@@ -51,7 +51,7 @@ public class WeatherClient {
         return dataFromOpenweathermap;
     }
 
-    public static JsonNode getDataTreeJson(String url) {
+    public JsonNode getDataTreeJson(String url) {
         JsonNode getJsonForTest = null;
         try {
             getJsonForTest = new ObjectMapper().readTree(new URL(url));

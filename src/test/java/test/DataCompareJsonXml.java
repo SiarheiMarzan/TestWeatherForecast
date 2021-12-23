@@ -1,35 +1,33 @@
 package test;
 
-import client.WeatherClient;
 import model.Forecast;
-import org.jsoup.Connection;
-import org.jsoup.Jsoup;
 import org.jsoup.select.Elements;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.client.RestTemplate;
+import util.BaseClass;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
-public class DataCompareJsonXml {
+public class DataCompareJsonXml extends BaseClass {
 
     @Test
     public void weatherDataTest() {
-
-        RestTemplate restTemplate = new RestTemplate();
-
-        WeatherClient weatherClient = new WeatherClient(restTemplate);
 
         ResponseEntity<Forecast> responseWeatherJson = weatherClient
                 .requestApi("Brest,BLR");
         Assert.assertEquals(responseWeatherJson.getStatusCode().value(), 200);
 
-
         org.jsoup.nodes.Document dataFromOpenweathermap = weatherClient.getDataJson("Brest,BLR");
 
+        validateCompareResponces();
+    }
+
+    private void validateCompareResponces() {
+        ResponseEntity<Forecast> responseWeatherJson = weatherClient
+                .requestApi("Brest,BLR");
         Forecast getInfoWeather = responseWeatherJson.getBody();
         String coordinateLatCityJsonConv = String.valueOf(getInfoWeather.getCoord().getLat());
         String coordinateLonCityJsonConv = String.valueOf(getInfoWeather.getCoord().getLon());
@@ -46,6 +44,7 @@ public class DataCompareJsonXml {
         String feelsLikeConv = String.valueOf(getInfoWeather.getMain().getFeels_like());
 
 
+        org.jsoup.nodes.Document dataFromOpenweathermap = weatherClient.getDataJson("Brest,BLR");
         Elements coordinates = dataFromOpenweathermap.select("coord");
         Elements sunTimeLive = dataFromOpenweathermap.select("sun");
         Elements speedWind = dataFromOpenweathermap.select("speed");
@@ -72,14 +71,6 @@ public class DataCompareJsonXml {
         Assert.assertEquals(tempAirMaxConv, tempAirMaxXML);
         Assert.assertEquals(tempAirMinConv, tempAirMinXML);
         Assert.assertEquals(feelsLikeConv, feelsLikeXML);
-
-    }
-
-    private void compareWeatherResponces() {
-
-    }
-
-    private void validateJsonXml() {
 
     }
 }
