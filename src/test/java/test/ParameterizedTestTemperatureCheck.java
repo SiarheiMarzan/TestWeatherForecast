@@ -24,12 +24,14 @@ public class ParameterizedTestTemperatureCheck extends BaseClass {
         String urlJson = getTestData("weather.base.url") + "/data/2.5/forecast?q=" + city
                 + "&units=metric&appid=" + getTestData("weather.api.key");
 
+        //send get weather request in json for city
         JsonNode getJsonForTest = weatherClient.getDataTreeJson(urlJson);
 
         //get the size of the checked blocks in the list
         int getSizeList = getJsonForTest.get("list").size();
         double controlTemperature = 35.0;
 
+        //check each block of the list for a condition and perform a check
         for (int i = 0; i <= getSizeList - 1; i++) {
             String dataFromDtTxt = getJsonForTest.get("list").get(i).path("dt_txt").toString();
 

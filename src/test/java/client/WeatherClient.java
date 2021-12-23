@@ -3,7 +3,6 @@ package client;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import model.Forecast;
-import org.jsoup.Jsoup;
 import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -28,6 +27,15 @@ public class WeatherClient {
                 + "/data/2.5/weather?q=" + city + "&appid=" + getTestData("weather.api.key"), Forecast.class);
     }
 
+    public ResponseEntity<String> requestApiXml(String city) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(Arrays.asList(MediaType.APPLICATION_XML));
+        HttpEntity<String> entity = new HttpEntity<String>("Content-Type", headers);
+        return restTemplate.exchange(getTestData("weather.base.url")
+                        + "/data/2.5/weather?q=" + city + "&mode=xml&appid=" + getTestData("weather.api.key")
+                , HttpMethod.GET, entity, String.class);
+    }
+
     public double getDataWeather(String city) {
         String urlWeather = getTestData("weather.base.url") + "/data/2.5/weather?q=" + city
                 + "&appid=" + getTestData("weather.api.key");
@@ -38,17 +46,6 @@ public class WeatherClient {
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<Forecast> response = restTemplate.exchange(urlWeather, HttpMethod.GET, entity, Forecast.class);
         return response.getBody().getMain().getTemp();
-    }
-
-    public org.jsoup.nodes.Document getDataJson(String city) {
-        org.jsoup.nodes.Document dataFromOpenweathermap = null;
-        try {
-            dataFromOpenweathermap = Jsoup.connect(getTestData("weather.base.url")
-                    + "/data/2.5/weather?q=" + city + "&mode=xml&appid=" + getTestData("weather.api.key")).get();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return dataFromOpenweathermap;
     }
 
     public JsonNode getDataTreeJson(String url) {

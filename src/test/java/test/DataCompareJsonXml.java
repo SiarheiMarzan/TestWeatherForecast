@@ -1,10 +1,10 @@
 package test;
 
 import model.Forecast;
-import org.jsoup.select.Elements;
+import org.jsoup.Jsoup;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import util.BaseClass;
 
 import java.time.Instant;
@@ -16,61 +16,63 @@ public class DataCompareJsonXml extends BaseClass {
     @Test
     public void weatherDataTest() {
 
+        //send get weather request in json
         ResponseEntity<Forecast> responseWeatherJson = weatherClient
                 .requestApi("Brest,BLR");
         Assert.assertEquals(responseWeatherJson.getStatusCode().value(), 200);
 
-        org.jsoup.nodes.Document dataFromOpenweathermap = weatherClient.getDataJson("Brest,BLR");
+        //send get weather request in xml
+        ResponseEntity<String> responseWeatherXml = weatherClient.requestApiXml("Brest,BLR");
+        Assert.assertEquals(responseWeatherXml.getStatusCode().value(), 200);
 
-        validateCompareResponces();
+        validateCompareResponces(responseWeatherJson, responseWeatherXml);
     }
 
-    private void validateCompareResponces() {
-        ResponseEntity<Forecast> responseWeatherJson = weatherClient
-                .requestApi("Brest,BLR");
+    private void validateCompareResponces(ResponseEntity<Forecast> responseWeatherJson,
+                                          ResponseEntity<String> responseWeatherXml) {
+
         Forecast getInfoWeather = responseWeatherJson.getBody();
-        String coordinateLatCityJsonConv = String.valueOf(getInfoWeather.getCoord().getLat());
-        String coordinateLonCityJsonConv = String.valueOf(getInfoWeather.getCoord().getLon());
+        org.jsoup.nodes.Document dataFromOpenweathermap = Jsoup.parse(responseWeatherXml.getBody());
         LocalDateTime dtRise = Instant.ofEpochSecond(getInfoWeather.getSys().getSunrise()).atZone(ZoneId.of("UTC"))
                 .toLocalDateTime();
-        String riseSunJsonConv = String.valueOf(dtRise);
         LocalDateTime dtSet = Instant.ofEpochSecond(getInfoWeather.getSys().getSunset()).atZone(ZoneId.of("UTC"))
                 .toLocalDateTime();
-        String setSunJsonConv = String.valueOf(dtSet);
-        double speedWindJson = getInfoWeather.getWind().getSpeed();
-        String pressureAirJsonConv = String.valueOf(getInfoWeather.getMain().getPressure());
-        String tempAirMaxConv = String.valueOf(getInfoWeather.getMain().getTemp_max());
-        String tempAirMinConv = String.valueOf(getInfoWeather.getMain().getTemp_min());
-        String feelsLikeConv = String.valueOf(getInfoWeather.getMain().getFeels_like());
 
+        String coordinateLatitudeFromJson = String.valueOf(getInfoWeather.getCoord().getLat());
+        String coordinateLatitudeFromXml = dataFromOpenweathermap.select("coord").attr("lat");
+        Assert.assertEquals(coordinateLatitudeFromJson, coordinateLatitudeFromXml);
 
-        org.jsoup.nodes.Document dataFromOpenweathermap = weatherClient.getDataJson("Brest,BLR");
-        Elements coordinates = dataFromOpenweathermap.select("coord");
-        Elements sunTimeLive = dataFromOpenweathermap.select("sun");
-        Elements speedWind = dataFromOpenweathermap.select("speed");
-        Elements pressureAir = dataFromOpenweathermap.select("pressure");
-        Elements temperatureAir = dataFromOpenweathermap.select("temperature");
-        Elements feelsLikeCity = dataFromOpenweathermap.select("feels_like");
-        var coordinateLatCityXML = coordinates.attr("lat");
-        var coordinateLonCityXML = coordinates.attr("lon");
-        var riseSunXML = sunTimeLive.attr("rise");
-        var setSunXML = sunTimeLive.attr("set");
-        var speedWindXML = speedWind.attr("value");
-        double speedWindXMLConv = Double.parseDouble(speedWindXML);
-        var pressureAirXML = pressureAir.attr("value");
-        var tempAirMinXML = temperatureAir.attr("min");
-        var tempAirMaxXML = temperatureAir.attr("max");
-        var feelsLikeXML = feelsLikeCity.attr("value");
+        String coordinateLongitudeFromJson = String.valueOf(getInfoWeather.getCoord().getLon());
+        String coordinateLongitudeFromXml = dataFromOpenweathermap.select("coord").attr("lon");
+        Assert.assertEquals(coordinateLongitudeFromJson, coordinateLongitudeFromXml);
 
-        Assert.assertEquals(coordinateLatCityJsonConv, coordinateLatCityXML);
-        Assert.assertEquals(coordinateLonCityJsonConv, coordinateLonCityXML);
-        Assert.assertEquals(riseSunJsonConv, riseSunXML);
-        Assert.assertEquals(setSunJsonConv, setSunXML);
-        Assert.assertEquals(speedWindJson, speedWindXMLConv, 0.00);
-        Assert.assertEquals(pressureAirJsonConv, pressureAirXML);
-        Assert.assertEquals(tempAirMaxConv, tempAirMaxXML);
-        Assert.assertEquals(tempAirMinConv, tempAirMinXML);
-        Assert.assertEquals(feelsLikeConv, feelsLikeXML);
+        String timeRiseSunFromJson = String.valueOf(dtRise);
+        String timeRiseSunFromXml = dataFromOpenweathermap.select("sun").attr("rise");
+        Assert.assertEquals(timeRiseSunFromJson, timeRiseSunFromXml);
+
+        String timeSetSunFromJson = String.valueOf(dtSet);
+        String timeSetSunFromXml = dataFromOpenweathermap.select("sun").attr("set");
+        Assert.assertEquals(timeSetSunFromJson, timeSetSunFromXml);
+
+        double valueSpeedWindFromJson = getInfoWeather.getWind().getSpeed();
+        double valueSpeedWindFromXML= Double.parseDouble(dataFromOpenweathermap.select("speed").attr("value"));
+        Assert.assertEquals(valueSpeedWindFromJson, valueSpeedWindFromXML, 0.00);
+
+        String valuePressureAirFromJson = String.valueOf(getInfoWeather.getMain().getPressure());
+        String valuePressureAirFromXML = dataFromOpenweathermap.select("pressure").attr("value");
+        Assert.assertEquals(valuePressureAirFromJson, valuePressureAirFromXML);
+
+        String maximumAirTemperatureFromJson = String.valueOf(getInfoWeather.getMain().getTemp_max());
+        String maximumAirTemperatureFromXml = dataFromOpenweathermap.select("temperature").attr("max");
+        Assert.assertEquals(maximumAirTemperatureFromJson, maximumAirTemperatureFromXml);
+
+        String minimumAirTemperatureFromJson = String.valueOf(getInfoWeather.getMain().getTemp_min());
+        String minimumAirTemperatureFromXml = dataFromOpenweathermap.select("temperature").attr("min");
+        Assert.assertEquals(minimumAirTemperatureFromJson, minimumAirTemperatureFromXml);
+
+        String valueFeelsLikeFromJson = String.valueOf(getInfoWeather.getMain().getFeels_like());
+        String valueFeelsLikeFromXML = dataFromOpenweathermap.select("feels_like").attr("value");
+        Assert.assertEquals(valueFeelsLikeFromJson, valueFeelsLikeFromXML);
 
     }
 }
