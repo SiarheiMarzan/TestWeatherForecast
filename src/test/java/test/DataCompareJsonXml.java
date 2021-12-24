@@ -5,24 +5,24 @@ import org.jsoup.Jsoup;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.*;
-import util.BaseClass;
+import util.BaseTest;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
-public class DataCompareJsonXml extends BaseClass {
+public class DataCompareJsonXml extends BaseTest {
 
     @Test
     public void weatherDataTest() {
 
         //send get weather request in json
         ResponseEntity<Forecast> responseWeatherJson = weatherClient
-                .requestApi("Brest,BLR");
+                .requestApi("Brest,BLR", Forecast.class);
         Assert.assertEquals(responseWeatherJson.getStatusCode().value(), 200);
 
         //send get weather request in xml
-        ResponseEntity<String> responseWeatherXml = weatherClient.requestApiXml("Brest,BLR");
+        ResponseEntity<String> responseWeatherXml = weatherClient.requestApi("Brest,BLR&mode=xml", String.class);
         Assert.assertEquals(responseWeatherXml.getStatusCode().value(), 200);
 
         validateCompareResponces(responseWeatherJson, responseWeatherXml);
@@ -55,7 +55,7 @@ public class DataCompareJsonXml extends BaseClass {
         Assert.assertEquals(timeSetSunFromJson, timeSetSunFromXml);
 
         double valueSpeedWindFromJson = getInfoWeather.getWind().getSpeed();
-        double valueSpeedWindFromXML= Double.parseDouble(dataFromOpenweathermap.select("speed").attr("value"));
+        double valueSpeedWindFromXML = Double.parseDouble(dataFromOpenweathermap.select("speed").attr("value"));
         Assert.assertEquals(valueSpeedWindFromJson, valueSpeedWindFromXML, 0.00);
 
         String valuePressureAirFromJson = String.valueOf(getInfoWeather.getMain().getPressure());

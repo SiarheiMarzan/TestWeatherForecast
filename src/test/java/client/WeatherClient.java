@@ -13,7 +13,10 @@ import java.util.Arrays;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static util.DataReader.getTestData;
 
-public class WeatherClient {
+public class WeatherClient<T> {
+
+    private T Forecast;
+    private T String;
 
     private RestTemplate restTemplate;
 
@@ -21,19 +24,10 @@ public class WeatherClient {
         this.restTemplate = restTemplate;
     }
 
-    public ResponseEntity<Forecast> requestApi(String city) {
+    public ResponseEntity<T> requestApi(String city, Class typeClass) {
 
         return restTemplate.getForEntity(getTestData("weather.base.url")
-                + "/data/2.5/weather?q=" + city + "&appid=" + getTestData("weather.api.key"), Forecast.class);
-    }
-
-    public ResponseEntity<String> requestApiXml(String city) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setAccept(Arrays.asList(MediaType.APPLICATION_XML));
-        HttpEntity<String> entity = new HttpEntity<String>("Content-Type", headers);
-        return restTemplate.exchange(getTestData("weather.base.url")
-                        + "/data/2.5/weather?q=" + city + "&mode=xml&appid=" + getTestData("weather.api.key")
-                , HttpMethod.GET, entity, String.class);
+                + "/data/2.5/weather?q=" + city + "&appid=" + getTestData("weather.api.key"), typeClass);
     }
 
     public double getDataWeather(String city) {

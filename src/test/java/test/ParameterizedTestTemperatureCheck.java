@@ -1,15 +1,14 @@
 package test;
 
-import client.WeatherClient;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import util.BaseClass;
+import util.BaseTest;
 
 import static util.DataReader.getTestData;
 
-public class ParameterizedTestTemperatureCheck extends BaseClass {
+public class ParameterizedTestTemperatureCheck extends BaseTest {
 
     private SoftAssertions softAssertions = new SoftAssertions();
 
