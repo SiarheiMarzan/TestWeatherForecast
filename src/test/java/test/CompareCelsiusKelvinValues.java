@@ -6,7 +6,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.ResponseEntity;
 import util.BaseTest;
 
-import java.text.DecimalFormat;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 
 public class CompareCelsiusKelvinValues extends BaseTest {
 
@@ -14,23 +15,22 @@ public class CompareCelsiusKelvinValues extends BaseTest {
     public void temperatureTest() {
 
         //send get weather request get temperature value in the metric system and check response
-        double valueTemperatureCelsium = weatherClient.getDataWeather("Brest,BLR&units=metric");
-        ResponseEntity<Forecast> metricResponseForCheck = weatherClient.requestApi("Brest,BLR&units=metric", Forecast.class);
-        Assert.assertEquals(metricResponseForCheck.getStatusCode().value(), 200);
-
-        double valueConversionCelsiusToKelvin = valueTemperatureCelsium + 273.15;
+        ResponseEntity<Forecast> responseCurrentWeatherMetric = weatherClient.getCurrentWeather("Brest,BLR", "metric");
+        Assert.assertEquals(responseCurrentWeatherMetric.getStatusCode().value(), 200);
 
         //send get weather request get the temperature value in kelvins and check response
-        double valueTemperatureKelvin = weatherClient.getDataWeather("Brest,BLR");
-        ResponseEntity<Forecast> responseForCheck = weatherClient.requestApi("Brest,BLR", Forecast.class);
-        Assert.assertEquals(responseForCheck.getStatusCode().value(), 200);
+        ResponseEntity<Forecast> responseCurrentWeatherStandart = weatherClient.getCurrentWeather("Brest,BLR");
+        Assert.assertEquals(responseCurrentWeatherStandart.getStatusCode().value(), 200);
 
-        //rounding up the values for an accurate comparison
-        DecimalFormat decimalFormat = new DecimalFormat("#.##");
-        String valueCelsium = decimalFormat.format(valueConversionCelsiusToKelvin);
-        String valueKelvin = decimalFormat.format(valueTemperatureKelvin);
+        //Cheking the received value in Celsium with Kelvin
+        assertThat(convertKelvinToCelsium(), equalTo(responseCurrentWeatherStandart.getBody().getMain().getTemp()));
 
-        Assert.assertEquals(valueCelsium, valueKelvin);
+    }
 
+    public double convertKelvinToCelsium() {
+        double valueTemperatureCelsium = weatherClient.getCurrentWeather("Brest,BLR", "metric")
+                .getBody().getMain().getTemp();
+        double valueConvertCelsiusToKelvin = valueTemperatureCelsium + 273.15;
+        return valueConvertCelsiusToKelvin;
     }
 }
