@@ -51,25 +51,15 @@ public class WeatherClient {
         return responseCurrentWeather;
     }
 
-    public ResponseEntity<String> getCurrentWeatherTest(String nameCity) {
+    public ResponseEntity<String> getForecast(String nameCity) {
         String city = getTestData("weather.base.url") + "/data/2.5/forecast?q=" + nameCity
                 + "&units=metric&appid=" + getTestData("weather.api.key");
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<Forecast> entity = new HttpEntity<>(headers);
-        ResponseEntity<String> responseCurrentWeather = restTemplate
+        ResponseEntity<String> responseForecast = restTemplate
                 .exchange(city, HttpMethod.GET, entity, String.class);
-        return responseCurrentWeather;
+        return responseForecast;
     }
 
-    public JsonNode getDataTreeJson(String url) {
-        JsonNode getJsonForTest = null;
-        try {
-            getJsonForTest = new ObjectMapper().readTree(new URL(url));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return getJsonForTest;
-    }
 
 }

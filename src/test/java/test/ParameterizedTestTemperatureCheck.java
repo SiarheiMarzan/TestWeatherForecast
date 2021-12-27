@@ -1,16 +1,13 @@
 package test;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.assertj.core.api.SoftAssertions;
+import org.junit.Assert;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.springframework.http.ResponseEntity;
 import util.BaseTest;
-
-import java.net.URL;
-
-import static util.DataReader.getTestData;
 
 public class ParameterizedTestTemperatureCheck extends BaseTest {
 
@@ -23,12 +20,12 @@ public class ParameterizedTestTemperatureCheck extends BaseTest {
             "Mogilev,BLR",
             "Gomel,BLR",
             "Grodno,BLR"})
-    public void temperatureCitiesTest(String nameCity) {
-        String city = getTestData("weather.base.url") + "/data/2.5/forecast?q=" + nameCity
-                + "&units=metric&appid=" + getTestData("weather.api.key");
+    public void temperatureCitiesTest(String nameCity) throws JsonProcessingException {
 
-        //send get weather request in json for city
-        JsonNode getForecast = weatherClient.getDataTreeJson(city);
+        Assert.assertEquals(weatherClient.getForecast(nameCity).getStatusCode().value(), 200);
+
+        //parsing response
+        JsonNode getForecast = new ObjectMapper().readTree(weatherClient.getForecast(nameCity).getBody());
 
         //get the size of the checked blocks in the list
         int getSizeList = getForecast.get("list").size();
