@@ -6,6 +6,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
+import util.BaseTest;
 
 import static util.DataReader.getTestData;
 
@@ -32,7 +33,6 @@ public class WeatherClient {
                 + "&units=" + unit + "&appid=" + getTestData("weather.api.key");
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<Forecast> entity = new HttpEntity<>(headers);
-        RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<Forecast> responseCurrentWeather = restTemplate
                 .exchange(urlWeather, HttpMethod.GET, entity, Forecast.class);
         return responseCurrentWeather;
@@ -43,7 +43,6 @@ public class WeatherClient {
                 + "&appid=" + getTestData("weather.api.key");
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<Forecast> entity = new HttpEntity<>(headers);
-        RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<Forecast> responseCurrentWeather = restTemplate
                 .exchange(urlWeather, HttpMethod.GET, entity, Forecast.class);
         return responseCurrentWeather;
