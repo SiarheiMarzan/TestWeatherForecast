@@ -26,9 +26,7 @@ public class CompareCelsiusKelvinValues extends BaseTest {
     }
 
     public double convertKelvinToCelsium() {
-        double valueTemperatureCelsium = weatherClient.getCurrentWeather("Brest,BLR", "metric")
-                .getBody().getMain().getTemp();
-        double valueConvertCelsiusToKelvin = valueTemperatureCelsium + 273.15;
-        return valueConvertCelsiusToKelvin;
+        return weatherClient.getCurrentWeather("Brest,BLR", "metric")
+                .getBody().getMain().getTemp() + 273.15;
     }
 }

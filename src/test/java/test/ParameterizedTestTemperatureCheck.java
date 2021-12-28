@@ -27,7 +27,7 @@ public class ParameterizedTestTemperatureCheck extends BaseTest {
         ResponseEntity<String> getRequestForecast = weatherClient.getForecast(nameCity);
         Assert.assertEquals(getRequestForecast.getStatusCode().value(), 200);
 
-        //parsing response
+        //parsing request forecast
         JsonNode getForecast = new ObjectMapper().readTree(getRequestForecast.getBody());
 
         //get the size of the checked blocks in the list
