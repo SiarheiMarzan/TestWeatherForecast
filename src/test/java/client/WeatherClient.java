@@ -22,9 +22,9 @@ public class WeatherClient {
                 + "/data/2.5/weather?q=" + city + "&appid=" + getTestData("weather.api.key"), typeClass);
     }
 
-    public <T> ResponseEntity<T> requestCurrentWeather(String city, String value, Class<T> typeClass) {
+    public <T> ResponseEntity<T> requestCurrentWeather(String city, String format, Class<T> typeClass) {
         return restTemplate.getForEntity(getTestData("weather.base.url")
-                + "/data/2.5/weather?q=" + city + "&mode=" + value + "&appid=" + getTestData("weather.api.key"), typeClass);
+                + "/data/2.5/weather?q=" + city + "&mode=" + format + "&appid=" + getTestData("weather.api.key"), typeClass);
     }
 
     public ResponseEntity<Forecast> getCurrentWeather(String city, String unit) {
