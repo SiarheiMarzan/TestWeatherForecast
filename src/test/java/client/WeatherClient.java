@@ -26,7 +26,7 @@ public class WeatherClient {
 
     public <T> ResponseEntity<T> requestCurrentWeather(String city, String value, Class<T> typeClass) {
         return restTemplate.getForEntity(getTestData("weather.base.url")
-                + "/data/2.5/weather?q=" + city + "&mode=" + "&appid=" + getTestData("weather.api.key"), typeClass);
+                + "/data/2.5/weather?q=" + city + "&mode=" + value + "&appid=" + getTestData("weather.api.key"), typeClass);
     }
 
     public ResponseEntity<Forecast> getCurrentWeather(String city, String unit) {
@@ -60,6 +60,4 @@ public class WeatherClient {
                 .exchange(city, HttpMethod.GET, entity, String.class);
         return responseForecast;
     }
-
-
 }
