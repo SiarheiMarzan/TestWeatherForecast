@@ -25,7 +25,7 @@ public class CompareCelsiusKelvinValues extends BaseTest {
         assertThat(convertKelvinToCelsium(), equalTo(responseCurrentWeatherStandart.getBody().getMain().getTemp()));
     }
 
-    public double convertKelvinToCelsium() {
+    private double convertKelvinToCelsium() {
         return weatherClient.getCurrentWeather("Brest,BLR", "metric")
                 .getBody().getMain().getTemp() + 273.15;
     }
