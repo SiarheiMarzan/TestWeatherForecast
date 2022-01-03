@@ -22,10 +22,11 @@ public class CompareCelsiusKelvinValues extends BaseTest {
         Assert.assertEquals(responseCurrentWeatherStandart.getStatusCode().value(), 200);
 
         //Cheking the received value in Celsium with Kelvin
-        assertThat(convertKelvinToCelsium(), equalTo(responseCurrentWeatherStandart.getBody().getMain().getTemp()));
+        assertThat(getTemperatureInKelvin(), equalTo(responseCurrentWeatherStandart.getBody().getMain().getTemp()));
     }
 
-    private double convertKelvinToCelsium() {
+
+    private double getTemperatureInKelvin() {
         return weatherClient.getCurrentWeather("Brest,BLR", "metric")
                 .getBody().getMain().getTemp() + 273.15;
     }

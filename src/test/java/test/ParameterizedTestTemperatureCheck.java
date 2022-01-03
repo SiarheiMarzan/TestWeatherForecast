@@ -22,7 +22,7 @@ public class ParameterizedTestTemperatureCheck extends BaseTest {
             "Gomel,BLR",
             "Grodno,BLR"})
     public void temperatureCitiesTest(String nameCity) throws JsonProcessingException {
-
+        double controlTemperature = 35.0;
         ResponseEntity<String> getRequestForecast = weatherClient.getForecast(nameCity);
         Assert.assertEquals(getRequestForecast.getStatusCode().value(), 200);
 
@@ -34,7 +34,6 @@ public class ParameterizedTestTemperatureCheck extends BaseTest {
         for (int i = 0; i <= getSizeList - 1; i++) {
             String dataFromDtTxt = getForecast.get("list").get(i).path("dt_txt").toString();
             if (dataFromDtTxt.contains("15:00:00")) {
-                double controlTemperature = 35.0;
                 double valueFeelsLike = getForecast.get("list").get(i).get("main").path("feels_like").asDouble();
                 softAssertions.assertThat(valueFeelsLike < controlTemperature).isEqualTo(true);
             }

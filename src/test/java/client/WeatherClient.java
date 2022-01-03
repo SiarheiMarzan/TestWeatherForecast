@@ -11,6 +11,7 @@ import static util.DataReader.getTestData;
 
 public class WeatherClient {
 
+
     private RestTemplate restTemplate;
 
     public WeatherClient(RestTemplate restTemplate) {
@@ -21,6 +22,7 @@ public class WeatherClient {
         return restTemplate.getForEntity(getTestData("weather.base.url")
                 + "/data/2.5/weather?q=" + city + "&appid=" + getTestData("weather.api.key"), typeClass);
     }
+
 
     public <T> ResponseEntity<T> requestCurrentWeather(String city, String format, Class<T> typeClass) {
         return restTemplate.getForEntity(getTestData("weather.base.url")
