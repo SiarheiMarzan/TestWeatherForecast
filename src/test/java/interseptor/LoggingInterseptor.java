@@ -1,7 +1,7 @@
 package interseptor;
 
-import org.apache.logging.log4j.Logger;
-import org.junit.platform.commons.logging.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 public class LoggingInterseptor implements ClientHttpRequestInterceptor {
 
-    static Logger LOGGER = (Logger) LoggerFactory.getLogger(LoggingInterseptor.class);
+    private static Logger LOGGER = LoggerFactory.getLogger(LoggingInterseptor.class);
 
     @Override
     public ClientHttpResponse intercept(HttpRequest request, byte[] reqBody, ClientHttpRequestExecution execution) throws IOException {
