@@ -17,17 +17,17 @@ public class WeatherClient {
         this.baseUrl = baseUrl;
     }
 
-    public <T> ResponseEntity<T> requestCurrentWeather(String city, Class<T> typeClass) {
+    public <T> ResponseEntity<T> requestCurrentWeatherJson(String city, Class<T> typeClass) {
         return restTemplate.getForEntity(baseUrl
                 + "/data/2.5/weather?q=" + city, typeClass);
     }
 
-    public <T> ResponseEntity<T> requestCurrentWeather(String city, String format, Class<T> typeClass) {
+    public <T> ResponseEntity<T> requestCurrentWeatherXml(String city, String format, Class<T> typeClass) {
         return restTemplate.getForEntity(baseUrl
                 + "/data/2.5/weather?q=" + city + "&mode=" + format, typeClass);
     }
 
-    public ResponseEntity<Forecast> getCurrentWeather(String city, String unit) {
+    public ResponseEntity<Forecast> getCurrentWeatherInMetricUnit(String city, String unit) {
         String urlWeather = baseUrl + "/data/2.5/weather?q=" + city
                 + "&units=" + unit;
         HttpHeaders headers = new HttpHeaders();
@@ -37,7 +37,7 @@ public class WeatherClient {
         return responseCurrentWeather;
     }
 
-    public ResponseEntity<Forecast> getCurrentWeather(String city) {
+    public ResponseEntity<Forecast> getCurrentWeatherInStandardUnits(String city) {
         String urlWeather = baseUrl + "/data/2.5/weather?q=" + city;
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<Forecast> entity = new HttpEntity<>(headers);
@@ -46,7 +46,7 @@ public class WeatherClient {
         return responseCurrentWeather;
     }
 
-    public ResponseEntity<String> getForecast(String nameCity) {
+    public ResponseEntity<String> getForecastWeather(String nameCity) {
         String city = baseUrl + "/data/2.5/forecast?q=" + nameCity
                 + "&units=metric";
         HttpHeaders headers = new HttpHeaders();

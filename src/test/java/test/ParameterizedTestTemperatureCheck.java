@@ -23,15 +23,12 @@ public class ParameterizedTestTemperatureCheck extends BaseTest {
             "Grodno,BLR"})
     public void temperatureCitiesTest(String nameCity) throws JsonProcessingException {
         double controlTemperature = 35.0;
-        ResponseEntity<String> getRequestForecast = weatherClient.getForecast(nameCity);
+        ResponseEntity<String> getRequestForecast = weatherClient.getForecastWeather(nameCity);
         Assert.assertEquals(getRequestForecast.getStatusCode().value(), 200);
-
         //parsing request forecast
         JsonNode getForecast = new ObjectMapper().readTree(getRequestForecast.getBody());
-        //get the size of the checked blocks in the list
-        int getSizeList = getForecast.get("list").size();
         //check each block of the list for a condition and perform a check
-        for (int i = 0; i <= getSizeList - 1; i++) {
+        for (int i = 0; i <= getForecast.get("list").size() - 1; i++) {
             String dataFromDtTxt = getForecast.get("list").get(i).path("dt_txt").toString();
             if (dataFromDtTxt.contains("15:00:00")) {
                 double valueFeelsLike = getForecast.get("list").get(i).get("main").path("feels_like").asDouble();

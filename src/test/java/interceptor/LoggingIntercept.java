@@ -1,4 +1,4 @@
-package interseptor;
+package interceptor;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,12 +13,13 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.stream.Collectors;
 
-public class LoggingInterseptor implements ClientHttpRequestInterceptor {
+public class LoggingIntercept implements ClientHttpRequestInterceptor {
 
-    private static Logger LOGGER = LoggerFactory.getLogger(LoggingInterseptor.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(LoggingIntercept.class);
 
     @Override
-    public ClientHttpResponse intercept(HttpRequest request, byte[] reqBody, ClientHttpRequestExecution execution) throws IOException {
+    public ClientHttpResponse intercept(HttpRequest request, byte[] reqBody
+            , ClientHttpRequestExecution execution) throws IOException {
         LOGGER.debug("Request body: {}", new String(reqBody, StandardCharsets.UTF_8));
         ClientHttpResponse response = execution.execute(request, reqBody);
         InputStreamReader isr = new InputStreamReader(
