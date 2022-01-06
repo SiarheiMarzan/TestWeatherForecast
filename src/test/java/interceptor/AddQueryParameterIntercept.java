@@ -10,14 +10,21 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.io.IOException;
 import java.net.URI;
 
-public class AddQueryParameterIntersept implements ClientHttpRequestInterceptor {
+public class AddQueryParameterIntercept implements ClientHttpRequestInterceptor {
+
+    private String appId;
+    private String apiKey;
+
+    public AddQueryParameterIntercept(String appId, String apiKey) {
+        this.appId = appId;
+        this.apiKey = apiKey;
+    }
 
     @Override
-    public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {
-
+    public ClientHttpResponse intercept(HttpRequest request, byte[] body
+            , ClientHttpRequestExecution execution) throws IOException {
         URI uri = UriComponentsBuilder.fromHttpRequest(request)
-                .queryParam("appid", "443625ff5854abe232f09b68419c89a3").build().toUri();
-
+                .queryParam(appId, apiKey).build().toUri();
         HttpRequest modifiedRequest = new HttpRequestWrapper(request) {
             @Override
             public URI getURI() {

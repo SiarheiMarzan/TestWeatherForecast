@@ -14,16 +14,15 @@ import java.time.ZoneId;
 public class DataCompareJsonXml extends BaseTest {
 
     @Test
-    public void weatherDataTest() {
-
+    public void comparingCurrentWeatherDataBetweenXmlAndJson() {
         //send get weather request in json
-        ResponseEntity<Forecast> responseWeatherJson = weatherClient.requestCurrentWeatherJson("Brest,BLR", Forecast.class);
+        ResponseEntity<Forecast> responseWeatherJson = weatherClient
+                .requestCurrentWeatherJson("Brest,BLR", Forecast.class);
         Assert.assertEquals(responseWeatherJson.getStatusCode().value(), 200);
-
         //send get weather request in xml
-        ResponseEntity<String> responseWeatherXml = weatherClient.requestCurrentWeatherXml("Brest,BLR", "xml", String.class);
+        ResponseEntity<String> responseWeatherXml = weatherClient
+                .requestCurrentWeatherXml("Brest,BLR", "xml", String.class);
         Assert.assertEquals(responseWeatherXml.getStatusCode().value(), 200);
-
         validateCompareResponces(responseWeatherJson, responseWeatherXml);
     }
 
@@ -54,7 +53,8 @@ public class DataCompareJsonXml extends BaseTest {
         Assert.assertEquals(timeSetSunFromJson, timeSetSunFromXml);
 
         double valueSpeedWindFromJson = getInfoWeather.getWind().getSpeed();
-        double valueSpeedWindFromXML = Double.parseDouble(dataFromOpenweathermap.select("speed").attr("value"));
+        double valueSpeedWindFromXML = Double.parseDouble(dataFromOpenweathermap.select("speed")
+                .attr("value"));
         Assert.assertEquals(valueSpeedWindFromJson, valueSpeedWindFromXML, 0.00);
 
         String valuePressureAirFromJson = String.valueOf(getInfoWeather.getMain().getPressure());
@@ -62,11 +62,13 @@ public class DataCompareJsonXml extends BaseTest {
         Assert.assertEquals(valuePressureAirFromJson, valuePressureAirFromXML);
 
         String maximumAirTemperatureFromJson = String.valueOf(getInfoWeather.getMain().getTemp_max());
-        String maximumAirTemperatureFromXml = dataFromOpenweathermap.select("temperature").attr("max");
+        String maximumAirTemperatureFromXml = dataFromOpenweathermap.select("temperature")
+                .attr("max");
         Assert.assertEquals(maximumAirTemperatureFromJson, maximumAirTemperatureFromXml);
 
         String minimumAirTemperatureFromJson = String.valueOf(getInfoWeather.getMain().getTemp_min());
-        String minimumAirTemperatureFromXml = dataFromOpenweathermap.select("temperature").attr("min");
+        String minimumAirTemperatureFromXml = dataFromOpenweathermap.select("temperature")
+                .attr("min");
         Assert.assertEquals(minimumAirTemperatureFromJson, minimumAirTemperatureFromXml);
 
         String valueFeelsLikeFromJson = String.valueOf(getInfoWeather.getMain().getFeels_like());
