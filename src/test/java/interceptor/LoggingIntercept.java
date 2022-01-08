@@ -14,7 +14,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.stream.Collectors;
 
 public class LoggingIntercept implements ClientHttpRequestInterceptor {
-
     private static final Logger LOGGER = LoggerFactory.getLogger(LoggingIntercept.class);
 
     @Override

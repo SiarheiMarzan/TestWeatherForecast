@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.net.URI;
 
 public class AddQueryParameterIntercept implements ClientHttpRequestInterceptor {
-
     private String appId;
     private String apiKey;
 

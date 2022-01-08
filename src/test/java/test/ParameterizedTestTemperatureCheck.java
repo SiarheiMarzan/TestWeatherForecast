@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import util.BaseTest;
 
 public class ParameterizedTestTemperatureCheck extends BaseTest {
-
     private SoftAssertions softAssertions = new SoftAssertions();
 
     @ParameterizedTest
@@ -23,7 +22,7 @@ public class ParameterizedTestTemperatureCheck extends BaseTest {
             "Grodno,BLR"})
     public void chekingCurrentTemperatureInRegionalCities(String nameCity) throws JsonProcessingException {
         double temperatureControlValueFeelsLike = 35.0;
-        ResponseEntity<String> getRequestForecast = weatherClient.getForecastWeather(nameCity);
+        ResponseEntity<String> getRequestForecast = weatherClient.getWeatherForecastForFiveDays(nameCity);
         Assert.assertEquals(getRequestForecast.getStatusCode().value(), 200);
         //parsing request forecast
         JsonNode getForecast = new ObjectMapper().readTree(getRequestForecast.getBody());

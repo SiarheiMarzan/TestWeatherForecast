@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 public class WeatherClient {
-
     private String baseUrl;
     private RestTemplate restTemplate;
 
@@ -46,7 +45,7 @@ public class WeatherClient {
         return responseCurrentWeather;
     }
 
-    public ResponseEntity<String> getForecastWeather(String nameCity) {
+    public ResponseEntity<String> getWeatherForecastForFiveDays(String nameCity) {
         String city = baseUrl + "/data/2.5/forecast?q=" + nameCity
                 + "&units=metric";
         HttpHeaders headers = new HttpHeaders();
