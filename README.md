@@ -17,3 +17,4 @@
 ***
 * Request a forecast for all regional cities of Belarus and Minsk in json (parameterized test).
 * Parse the answer in any way to choose from, choose from the answer the weather forecast for each day at 15:00, check that the "feels_like" temperature does not exceed 35 degrees Celsius.
+# Running WeatherForecast in CI environments
