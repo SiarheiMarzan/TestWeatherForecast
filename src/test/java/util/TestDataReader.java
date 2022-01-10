@@ -12,7 +12,7 @@ public class TestDataReader {
     public static String getEnv(String name) {
         String value = System.getenv(name);
         if (value == null) {
-            value = System.getenv(name);
+            value = System.getProperty("environment","qa");
         }
         return value;
     }
