@@ -36,9 +36,9 @@ public static String getEnv(String name) {
 ```
 ***
 To run a test with the necessary properties, it must be placed in the resources folder of the project, for example, with the name *qa.properties* or any other *test.properties* files with the necessary data.
-* gradle test -Denvironment=qa 
+* *gradle test -Denvironment=qa*
 
 ![](pictures/example.png)
 
-* It is possible to run the test via wrapper:
- - .\gradlew.bat test -Denvironment=qa -i
+* It is possible to run the test via wrapper: *.\gradlew.bat test -Denvironment=qa -i*
+
