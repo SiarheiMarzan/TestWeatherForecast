@@ -16,12 +16,12 @@ public class WeatherClient {
         this.baseUrl = baseUrl;
     }
 
-    public <T> ResponseEntity<T> requestCurrentWeatherJson(String city, Class<T> typeClass) {
+    public <T> ResponseEntity<T> sendRequestCurrentWeatherJson(String city, Class<T> typeClass) {
         return restTemplate.getForEntity(baseUrl
                 + "/data/2.5/weather?q=" + city, typeClass);
     }
 
-    public <T> ResponseEntity<T> requestCurrentWeatherXml(String city, String format, Class<T> typeClass) {
+    public <T> ResponseEntity<T> sendRequestCurrentWeatherXml(String city, String format, Class<T> typeClass) {
         return restTemplate.getForEntity(baseUrl
                 + "/data/2.5/weather?q=" + city + "&mode=" + format, typeClass);
     }

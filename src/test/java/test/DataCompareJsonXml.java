@@ -17,11 +17,11 @@ public class DataCompareJsonXml extends BaseTest {
     public void comparingCurrentWeatherDataBetweenXmlAndJson() {
         //send get weather request in json
         ResponseEntity<Forecast> responseWeatherJson = weatherClient
-                .requestCurrentWeatherJson("Brest,BLR", Forecast.class);
+                .sendRequestCurrentWeatherJson("Brest,BLR", Forecast.class);
         Assert.assertEquals(responseWeatherJson.getStatusCode().value(), 200);
         //send get weather request in xml
         ResponseEntity<String> responseWeatherXml = weatherClient
-                .requestCurrentWeatherXml("Brest,BLR", "xml", String.class);
+                .sendRequestCurrentWeatherXml("Brest,BLR", "xml", String.class);
         Assert.assertEquals(responseWeatherXml.getStatusCode().value(), 200);
         validateCompareResponces(responseWeatherJson, responseWeatherXml);
     }
