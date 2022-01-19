@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import util.BaseTest;
 
 public class ParameterizedTestTemperatureCheck extends BaseTest {
+
     private SoftAssertions softAssertions = new SoftAssertions();
 
     @ParameterizedTest

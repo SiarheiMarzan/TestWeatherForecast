@@ -4,12 +4,13 @@ import model.Forecast;
 import org.jsoup.Jsoup;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
-import org.springframework.http.*;
+import org.springframework.http.ResponseEntity;
 import util.BaseTest;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+
 
 public class DataCompareJsonXml extends BaseTest {
 

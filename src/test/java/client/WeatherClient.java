@@ -5,29 +5,32 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+@Service
 public class WeatherClient {
-    private String baseUrl;
-    private RestTemplate restTemplate;
 
-    public WeatherClient(RestTemplate restTemplate, String baseUrl) {
+    private RestTemplate restTemplate;
+    private String url;
+
+    public WeatherClient(RestTemplate restTemplate, String url) {
+        this.url = url;
         this.restTemplate = restTemplate;
-        this.baseUrl = baseUrl;
     }
 
     public <T> ResponseEntity<T> sendRequestCurrentWeatherJson(String city, Class<T> typeClass) {
-        return restTemplate.getForEntity(baseUrl
+        return restTemplate.getForEntity(url
                 + "/data/2.5/weather?q=" + city, typeClass);
     }
 
     public <T> ResponseEntity<T> sendRequestCurrentWeatherXml(String city, String format, Class<T> typeClass) {
-        return restTemplate.getForEntity(baseUrl
+        return restTemplate.getForEntity(url
                 + "/data/2.5/weather?q=" + city + "&mode=" + format, typeClass);
     }
 
     public ResponseEntity<Forecast> getCurrentWeatherInMetricUnit(String city, String unit) {
-        String urlWeather = baseUrl + "/data/2.5/weather?q=" + city
+        String urlWeather = url + "/data/2.5/weather?q=" + city
                 + "&units=" + unit;
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<Forecast> entity = new HttpEntity<>(headers);
@@ -37,7 +40,7 @@ public class WeatherClient {
     }
 
     public ResponseEntity<Forecast> getCurrentWeatherInStandardUnits(String city) {
-        String urlWeather = baseUrl + "/data/2.5/weather?q=" + city;
+        String urlWeather = url + "/data/2.5/weather?q=" + city;
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<Forecast> entity = new HttpEntity<>(headers);
         ResponseEntity<Forecast> responseCurrentWeather = restTemplate
@@ -46,7 +49,7 @@ public class WeatherClient {
     }
 
     public ResponseEntity<String> getWeatherForecastForFiveDays(String nameCity) {
-        String city = baseUrl + "/data/2.5/forecast?q=" + nameCity
+        String city = url + "/data/2.5/forecast?q=" + nameCity
                 + "&units=metric";
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<Forecast> entity = new HttpEntity<>(headers);
