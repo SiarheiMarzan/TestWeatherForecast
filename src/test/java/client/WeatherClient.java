@@ -1,18 +1,26 @@
 package client;
 
 import model.Forecast;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+@Service
+@ComponentScan
 public class WeatherClient {
+
     private String baseUrl;
+
+    @Autowired
     private RestTemplate restTemplate;
 
-    public WeatherClient(RestTemplate restTemplate, String baseUrl) {
-        this.restTemplate = restTemplate;
+    public WeatherClient(RestTemplate restTemplateGenerator, String baseUrl) {
+        this.restTemplate = restTemplateGenerator;
         this.baseUrl = baseUrl;
     }
 
