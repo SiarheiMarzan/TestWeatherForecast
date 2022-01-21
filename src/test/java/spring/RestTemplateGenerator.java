@@ -1,14 +1,15 @@
 package spring;
 
-import client.WeatherClient;
 import interceptor.AddQueryParameterIntercept;
 import interceptor.LoggingIntercept;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.client.BufferingClientHttpRequestFactory;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
-import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.client.RestTemplate;
 
@@ -17,7 +18,9 @@ import java.util.List;
 
 import static util.TestDataReader.getTestData;
 
-@Component
+@Configuration
+@ComponentScan(basePackages = {"client"})
+@PropertySource("classpath:${env:qa}.properties")
 public class RestTemplateGenerator {
 
     @Bean
@@ -33,12 +36,5 @@ public class RestTemplateGenerator {
         interceptors.add(new LoggingIntercept());
         restTemplate.setInterceptors(interceptors);
         return restTemplate;
-    }
-
-    @Bean
-    public WeatherClient weatherClient() {
-        WeatherClient weatherClient = new WeatherClient(createRestTemplate(), getTestData("weather.base.url"));
-        return weatherClient;
-
     }
 }

@@ -2,27 +2,22 @@ package client;
 
 import model.Forecast;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.ComponentScan;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-@Service
-@ComponentScan
+@Component
 public class WeatherClient {
 
+    @Value("${weather.base.url}")
     private String baseUrl;
 
     @Autowired
     private RestTemplate restTemplate;
-
-    public WeatherClient(RestTemplate restTemplateGenerator, String baseUrl) {
-        this.restTemplate = restTemplateGenerator;
-        this.baseUrl = baseUrl;
-    }
 
     public <T> ResponseEntity<T> sendRequestCurrentWeatherJson(String city, Class<T> typeClass) {
         return restTemplate.getForEntity(baseUrl
