@@ -2,6 +2,7 @@ package spring;
 
 import interceptor.AddQueryParameterIntercept;
 import interceptor.LoggingIntercept;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -16,12 +17,16 @@ import org.springframework.web.client.RestTemplate;
 import java.util.ArrayList;
 import java.util.List;
 
-import static util.TestDataReader.getTestData;
-
 @Configuration
-@ComponentScan(basePackages = {"client"})
+@ComponentScan(basePackages = {"client", "interceptor"})
 @PropertySource("classpath:${env:qa}.properties")
 public class RestTemplateGenerator {
+
+    @Autowired
+    private AddQueryParameterIntercept addQueryParameterIntercept;
+
+    @Autowired
+    private LoggingIntercept loggingIntercept;
 
     @Bean
     public RestTemplate createRestTemplate() {
@@ -32,8 +37,8 @@ public class RestTemplateGenerator {
         if (CollectionUtils.isEmpty(interceptors)) {
             interceptors = new ArrayList<>();
         }
-        interceptors.add(new AddQueryParameterIntercept("appid", getTestData("weather.base.key")));
-        interceptors.add(new LoggingIntercept());
+        interceptors.add(addQueryParameterIntercept);
+        interceptors.add(loggingIntercept);
         restTemplate.setInterceptors(interceptors);
         return restTemplate;
     }
