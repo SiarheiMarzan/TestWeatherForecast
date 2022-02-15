@@ -7,21 +7,25 @@ import wiremock.com.fasterxml.jackson.core.JsonProcessingException;
 import wiremock.com.fasterxml.jackson.databind.JsonNode;
 import wiremock.com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.io.IOException;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
-public class ResponseRestTemplate {
+public class ResponseRestTemplate{
+
     static RestTemplate restTemplate = new RestTemplate();
     static String fooResourceUrl
             = "http://localhost:8081/";
 
-    public static void main(String[] args) throws JsonProcessingException {
-        checkResponeJson();
-        checkResponeXml();
-        checkResponejpg();
-        checkResponseNotNullValue();
-        checkValueBody();
-        checkWithHeaders();
+    public static void main(String[] args) throws IOException {
+//        checkResponeJson();
+//        checkResponeXml();
+//        checkResponejpg();
+//        checkResponseNotNullValue();
+//        checkValueBody();
+//        checkWithHeaders();
+        retrieveHeaders();
 
     }
 
@@ -53,15 +57,6 @@ public class ResponseRestTemplate {
         assertThat(name.asText(), equalToIgnoringCase("12345"));
     }
 
-    public static void checkWithHeaders() {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", "application/octet-stream");
-        HttpEntity<String> entity = new HttpEntity<>(headers);
-        ResponseEntity<String> response = restTemplate
-                .exchange(fooResourceUrl + "binary", HttpMethod.GET, entity, String.class);
-        Assert.assertThat(response.getStatusCode(), equalTo(HttpStatus.OK));
-    }
-
     public static void checkResponeJson() {
         ResponseEntity<String> response =
                 restTemplate.getForEntity(fooResourceUrl + "json", String.class);
@@ -74,10 +69,15 @@ public class ResponseRestTemplate {
         Assert.assertThat(response.getStatusCode(), equalTo(HttpStatus.OK));
     }
 
+
     public static void checkResponejpg() {
         ResponseEntity<String> response =
-                restTemplate.getForEntity(fooResourceUrl + "json", String.class);
+                restTemplate.getForEntity(fooResourceUrl + "jpg", String.class);
         Assert.assertThat(response.getStatusCode(), equalTo(HttpStatus.OK));
     }
 
+    public static void retrieveHeaders() {
+        HttpHeaders httpHeaders = restTemplate.headForHeaders(fooResourceUrl);
+        Assert.assertTrue(httpHeaders.getContentType().includes(MediaType.valueOf("text/plain")));
+    }
 }
