@@ -2,15 +2,21 @@ package wiremock;
 
 import org.junit.Assert;
 import org.springframework.http.*;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import wiremock.com.fasterxml.jackson.core.JsonProcessingException;
 import wiremock.com.fasterxml.jackson.databind.JsonNode;
 import wiremock.com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
+import java.net.URI;
+import java.util.Arrays;
+import java.util.Set;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertTrue;
 
 public class ResponseRestTemplate{
 
@@ -20,12 +26,11 @@ public class ResponseRestTemplate{
 
     public static void main(String[] args) throws IOException {
 //        checkResponeJson();
-//        checkResponeXml();
-//        checkResponejpg();
 //        checkResponseNotNullValue();
 //        checkValueBody();
-//        checkWithHeaders();
-        retrieveHeaders();
+//        retrieveHeaders();
+//        getAllowedOperations();
+//        submitFormData();
 
     }
 
@@ -63,21 +68,26 @@ public class ResponseRestTemplate{
         Assert.assertThat(response.getStatusCode(), equalTo(HttpStatus.OK));
     }
 
-    public static void checkResponeXml() {
-        ResponseEntity<String> response =
-                restTemplate.getForEntity(fooResourceUrl + "xml", String.class);
-        Assert.assertThat(response.getStatusCode(), equalTo(HttpStatus.OK));
+    public static void getAllowedOperations() {
+        Set<HttpMethod> optionsForAllow = restTemplate.optionsForAllow(fooResourceUrl + "json");
+        HttpMethod[] supportedMethods
+                = {HttpMethod.GET, HttpMethod.POST, HttpMethod.PUT, HttpMethod.DELETE};
+        Assert.assertTrue(optionsForAllow.containsAll(Arrays.asList(supportedMethods)));
     }
 
 
-    public static void checkResponejpg() {
-        ResponseEntity<String> response =
-                restTemplate.getForEntity(fooResourceUrl + "jpg", String.class);
-        Assert.assertThat(response.getStatusCode(), equalTo(HttpStatus.OK));
+    public static void submitFormData() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+        map.add("id", "3");
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
+        ResponseEntity<String> response = restTemplate.postForEntity(fooResourceUrl + "json", request, String.class);
+        assertThat(response.getStatusCode(), is(HttpStatus.OK));
     }
 
     public static void retrieveHeaders() {
         HttpHeaders httpHeaders = restTemplate.headForHeaders(fooResourceUrl);
-        Assert.assertTrue(httpHeaders.getContentType().includes(MediaType.valueOf("text/plain")));
+        assertTrue(httpHeaders.getContentType().includes(MediaType.valueOf("text/plain")));
     }
 }
